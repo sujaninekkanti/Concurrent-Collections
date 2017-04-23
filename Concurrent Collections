@@ -1,0 +1,62 @@
+Need of concurrent collections:
+
+1.	Tradition collection objects(arraylist,hashmap,hashtable etc ) can be accessed by multiple threads simultaneously and there may a chance of data inconsistency problems and hence these are not thread safe 
+2.	Already existing thread safe collection (vector ,hashtable ,synchronized list(),synchronized set(),synchronizedMap()) performance wise is not up to the mark.
+3.	Because of every operation, even for read operation also total collection will be locked by only one thread at a time and it increases waiting time of threads and creates performance problems.
+4.	Another big problem with collections is while one thread iterating collections the other threads are not allowed to modify(structural modifications) collection object simultaneously if we are trying to modify then we will get concurrent modification exception.
+5.	Hence traditional collections are not suitable for multithreaded applications.
+6.	To overcome these problems sun introduced concurrent collections in 1.5 version.
+
+Difference between collections and concurrent collections:
+1.	Concurrent collections are thread safe.
+2.	when compared with collection thread safe collections performance is more because of different locking mechanism (segment locking /bucket level locking)
+3.	while one thread iterating collection the other threads are allowed to modify collections in safe manner.
+
+
+Concurrent collection classes:
+1.	concurrentHashMap.
+2.	copyOnWriteArrayList
+3.	copyOnWriteArraySet
+
+
+
+ConcurrentHashMap:
+1.	Underlying data structure is hash table.
+2.	Concurrent hashmap allows concurrent read and thread safe update operations.
+3.	To perform read operations thread won’t require any lock but to perform update operation thread requires lock but it is the lock of     only particular part of map 
+4.	Instead of whole map concurrent update achieved by internally dividing map into smaller portion which is defined by concurrency         level
+5.	The default concurrency level is 16
+6.	That is concurrent hashmap allows simultaneous read operations and simultaneous update operations
+7.	Null is not allowed for both keys and values
+8.	While one thread iterating the other thread can perform update operation and concurrent hashmap never throws concurrent modification      exception
+     Iterator of concurrentHashMap is fail-safe does not throw concurrent modification exception.
+     The modification by child thread may or may not available for the iterator of ConcurrentHashMap.
+
+
+copyOnWriteArrayList:
+1.	It is a thread safe version of arraylist 
+2.	Creates a cloned copy of underlying arraylist for every update operation at certain point both will be synchronized automatically       with is taken care bye JVM
+3.	As update operation will be performed on cloned copy there is no effect for the threads which performs read operation
+4.	It is costly to use because for Creates a cloned copy of underlying arraylist for every update operation. Hence it is best choice if     several read operations and less number of write operations
+5.	Insertion order is preserved
+6.	Duplicate objects are allowed
+7.	Heterogeneous objects are allowed
+8.	Null insertion is possible
+4.	While one thread iterating copyOnWriteArrayList the other threads are allowed to modify and won’t get concurrent modification           exception the iterator is fail safe
+5.	Iterator of arraylist can perform remove operation but iterator of copyonwrite arraylist cant perform remove operation otherwise we     will get runtime exception unsupported operation exception
+6.	Every update operation will be performed on separate copy hence after getting iterator if we are trying to perform any modifications     to list it won’t be reflected to the iterator.
+
+
+copyOnWriteArraySet
+1.	It is a thread safe version of set
+2.	 Internally implemented by copyonwriteArrayList
+3.	Insertion order is preserved
+4.	Duplicate objects are not allowed
+5.	Heterogeneous objects are allowed
+6.	Multiple threads can able to perform read operation simultaneously but for every update operation a separate copy will be created which is costly hence if multiple update operation a separate cloned copy will be created
+7.	It is costly to use because for Creates a cloned copy of underlying set for every update operation. Hence it is best choice if several read operations and less number of write operations
+8.	While one thread iterating copyOnWriteArrayset  the other threads are allowed to modify and won’t get concurrent modification exception the iterator is fail safe
+9.	Iterator of set can perform remove operation but iterator of copyonwritearrayset can’t perform remove operation otherwise we will get runtime exception unsupported operation exception
+10.	Every update operation will be performed on separate copy hence after getting iterator if we are trying to perform any modifications to list it won’t be reflected to the iterator.
+
+
